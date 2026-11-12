@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'router/app_router.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,23 +40,14 @@ class _MyAppState extends State<MyApp> {
     // Hook to pause timers or persist transient state in background.
   }
 
-  ThemeData _buildTheme(Brightness brightness) {
-    return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: brightness,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Route Kit',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       routerConfig: appRouter,
     );
   }
