@@ -1,9 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 
+import '../widgets/widgets.dart';
+
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, this.onLoginSuccess});
+  const LoginScreen({super.key, this.onLoginSuccess, this.onSignUp});
 
   final VoidCallback? onLoginSuccess;
+  final VoidCallback? onSignUp;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -14,12 +17,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _hasUnsavedInput = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(_updateUnsavedInput);
+    _passwordController.addListener(_updateUnsavedInput);
+  }
 
   @override
   void dispose() {
+    _emailController.removeListener(_updateUnsavedInput);
+    _passwordController.removeListener(_updateUnsavedInput);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _updateUnsavedInput() {
+    final hasInput =
+        _emailController.text.isNotEmpty || _passwordController.text.isNotEmpty;
+    if (hasInput != _hasUnsavedInput) {
+      setState(() => _hasUnsavedInput = hasInput);
+    }
   }
 
   void _submit() {
@@ -29,46 +50,83 @@ class _LoginScreenState extends State<LoginScreen> {
     widget.onLoginSuccess?.call();
   }
 
+  Future<void> _handleBlockedPop(bool didPop, Object? result) async {
+    if (didPop) return;
+
+    final shouldDiscard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: const Text('Discard credentials?'),
+        content: const Text(
+          'You have unsaved input. Do you want to clear the form?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDiscard == true && mounted) {
+      _emailController.clear();
+      _passwordController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const _LoginHeader(),
-                    const SizedBox(height: 32),
-                    _EmailField(controller: _emailController),
-                    const SizedBox(height: 16),
-                    _PasswordField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      onToggleVisibility: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                      onSubmitted: _submit,
-                    ),
-                    const SizedBox(height: 24),
-                    FilledButton(
-                      onPressed: _submit,
-                      style: FilledButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
+    return PopScope<Object?>(
+      canPop: !_hasUnsavedInput,
+      onPopInvokedWithResult: _handleBlockedPop,
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const _LoginHeader(),
+                      const SizedBox(height: 32),
+                      _EmailField(controller: _emailController),
+                      const SizedBox(height: 16),
+                      _PasswordField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        onToggleVisibility: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        onSubmitted: _submit,
                       ),
-                      child: const Text('Sign in'),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      AppButton(
+                        label: 'Sign in',
+                        rightIcon: Icons.arrow_forward,
+                        fullWidth: true,
+                        height: 52,
+                        onPressed: _submit,
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        label: 'Create account',
+                        variant: AppButtonVariant.text,
+                        fullWidth: true,
+                        onPressed: widget.onSignUp ?? () {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

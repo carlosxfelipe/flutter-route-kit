@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:flutter_route_kit/main.dart';
+import 'package:flutter_route_kit/router/auth_session.dart';
+import 'package:flutter_route_kit/screens/screens.dart';
 import 'package:flutter_route_kit/widgets/widgets.dart';
 
 void main() {
@@ -12,6 +14,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(FilledButton, 'Sign in'), findsOneWidget);
+      expect(find.text('Create account'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
 
       await tester.enterText(
         find.widgetWithText(TextFormField, 'Email'),
@@ -42,7 +46,7 @@ void main() {
     },
   );
 
-  testWidgets('AppHeader renders title, rightIcon and actions', (
+  testWidgets('AppHeader renders title, rightIcon, badge and actions', (
     WidgetTester tester,
   ) async {
     var tapped = false;
@@ -53,6 +57,7 @@ void main() {
           appBar: AppHeader(
             title: 'Dashboard',
             rightIcon: Icons.settings_outlined,
+            rightIconBadgeCount: 3,
             onRightIconPressed: () => tapped = true,
             actions: [
               IconButton(
@@ -66,11 +71,32 @@ void main() {
     );
 
     expect(find.text('Dashboard'), findsOneWidget);
+    expect(find.text('3'), findsOneWidget);
+    expect(find.byType(Badge), findsOneWidget);
     expect(find.byIcon(Icons.notifications_none), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.settings_outlined));
     expect(tapped, isTrue);
+  });
+
+  testWidgets('AppHeader caps notification badge count at 9+ by default', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          appBar: AppHeader(
+            title: 'Notifications',
+            rightIcon: Icons.notifications_none,
+            rightIconBadgeCount: 334,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('9+'), findsOneWidget);
+    expect(find.text('334'), findsNothing);
   });
 
   testWidgets('MyApp follows system brightness for light and dark themes', (
@@ -224,5 +250,51 @@ void main() {
 
     await tester.tap(find.text('Announcement'));
     expect(tapped, isTrue);
+  });
+
+  test('AuthSession toggles authentication state and notifies listeners', () {
+    final session = AuthSession();
+    var notifications = 0;
+    session.addListener(() => notifications++);
+
+    expect(session.isAuthenticated, isFalse);
+
+    session.signIn();
+    expect(session.isAuthenticated, isTrue);
+    expect(notifications, 1);
+
+    session.signIn();
+    expect(notifications, 1);
+
+    session.signOut();
+    expect(session.isAuthenticated, isFalse);
+    expect(notifications, 2);
+  });
+
+  testWidgets('LoginScreen blocks pop when form has unsaved input', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: LoginScreen()));
+
+    expect(
+      tester.widget<PopScope<Object?>>(find.byType(PopScope<Object?>)).canPop,
+      isTrue,
+    );
+
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Email'),
+      'user@example.com',
+    );
+    await tester.pump();
+
+    expect(
+      tester.widget<PopScope<Object?>>(find.byType(PopScope<Object?>)).canPop,
+      isFalse,
+    );
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Discard credentials?'), findsOneWidget);
   });
 }

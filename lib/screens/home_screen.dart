@@ -30,11 +30,12 @@ class HomeScreen extends StatelessWidget {
         title: 'Home',
         rightIcon: Icons.notifications_none,
         rightIconTooltip: 'Notifications',
+        rightIconBadgeCount: 3,
         onRightIconPressed: () {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('No new notifications')),
+              const SnackBar(content: Text('3 new notifications')),
             );
         },
       ),

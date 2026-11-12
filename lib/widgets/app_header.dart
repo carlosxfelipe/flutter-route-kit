@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'header_actions.dart';
+
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   const AppHeader({
     super.key,
@@ -8,6 +10,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     this.rightIcon,
     this.onRightIconPressed,
     this.rightIconTooltip,
+    this.rightIconBadgeCount,
+    this.rightIconBadgeMaxCount = 9,
+    this.showRightIconBadge = false,
     this.actions,
     this.centerTitle,
     this.automaticallyImplyLeading = true,
@@ -20,6 +25,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final IconData? rightIcon;
   final VoidCallback? onRightIconPressed;
   final String? rightIconTooltip;
+  final int? rightIconBadgeCount;
+  final int rightIconBadgeMaxCount;
+  final bool showRightIconBadge;
   final List<Widget>? actions;
   final bool? centerTitle;
   final bool automaticallyImplyLeading;
@@ -32,22 +40,20 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveActions = <Widget>[
-      ...?actions,
-      if (rightIcon != null)
-        IconButton(
-          onPressed: onRightIconPressed,
-          tooltip: rightIconTooltip,
-          icon: Icon(rightIcon),
-        ),
-    ];
-
     return AppBar(
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
       centerTitle: centerTitle,
       backgroundColor: backgroundColor,
-      actions: effectiveActions.isEmpty ? null : effectiveActions,
+      actions: buildHeaderActions(
+        actions: actions,
+        rightIcon: rightIcon,
+        onRightIconPressed: onRightIconPressed,
+        rightIconTooltip: rightIconTooltip,
+        rightIconBadgeCount: rightIconBadgeCount,
+        rightIconBadgeMaxCount: rightIconBadgeMaxCount,
+        showRightIconBadge: showRightIconBadge,
+      ),
       bottom: bottom,
       title: Text(title),
     );

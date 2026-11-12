@@ -117,7 +117,7 @@ class AppButton extends StatelessWidget {
         ),
         const SizedBox.square(
           dimension: 18,
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: CircularProgressIndicator.adaptive(strokeWidth: 2),
         ),
       ],
     );

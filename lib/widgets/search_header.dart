@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'header_actions.dart';
+
 class SearchHeader extends StatefulWidget implements PreferredSizeWidget {
   const SearchHeader({
     super.key,
@@ -13,6 +15,9 @@ class SearchHeader extends StatefulWidget implements PreferredSizeWidget {
     this.rightIcon,
     this.onRightIconPressed,
     this.rightIconTooltip,
+    this.rightIconBadgeCount,
+    this.rightIconBadgeMaxCount = 9,
+    this.showRightIconBadge = false,
     this.actions,
   });
 
@@ -26,6 +31,9 @@ class SearchHeader extends StatefulWidget implements PreferredSizeWidget {
   final IconData? rightIcon;
   final VoidCallback? onRightIconPressed;
   final String? rightIconTooltip;
+  final int? rightIconBadgeCount;
+  final int rightIconBadgeMaxCount;
+  final bool showRightIconBadge;
   final List<Widget>? actions;
 
   @override
@@ -83,21 +91,20 @@ class _SearchHeaderState extends State<SearchHeader> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final effectiveActions = <Widget>[
-      ...?widget.actions,
-      if (widget.rightIcon != null)
-        IconButton(
-          onPressed: widget.onRightIconPressed,
-          tooltip: widget.rightIconTooltip,
-          icon: Icon(widget.rightIcon),
-        ),
-    ];
 
     return AppBar(
       toolbarHeight: kToolbarHeight + 8,
       leading: widget.leading,
       titleSpacing: widget.leading == null ? 16 : 0,
-      actions: effectiveActions.isEmpty ? null : effectiveActions,
+      actions: buildHeaderActions(
+        actions: widget.actions,
+        rightIcon: widget.rightIcon,
+        onRightIconPressed: widget.onRightIconPressed,
+        rightIconTooltip: widget.rightIconTooltip,
+        rightIconBadgeCount: widget.rightIconBadgeCount,
+        rightIconBadgeMaxCount: widget.rightIconBadgeMaxCount,
+        showRightIconBadge: widget.showRightIconBadge,
+      ),
       title: SearchBar(
         controller: _controller,
         autoFocus: widget.autofocus,

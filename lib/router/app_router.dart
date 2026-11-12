@@ -1,18 +1,18 @@
 import 'package:go_router/go_router.dart';
-import 'package:material_ui/material_ui.dart';
 
 import '../screens/screens.dart';
+import 'auth_session.dart';
 
 // Set to false to disable the login flow and start directly on /home.
 const bool _requireAuth = true;
-final ValueNotifier<bool> _isAuthenticated = ValueNotifier<bool>(false);
+final AuthSession authSession = AuthSession();
 
 final GoRouter appRouter = GoRouter(
   initialLocation: _requireAuth ? '/login' : '/home',
-  refreshListenable: _requireAuth ? _isAuthenticated : null,
+  refreshListenable: _requireAuth ? authSession : null,
   redirect: _requireAuth
       ? (context, state) {
-          final isLoggedIn = _isAuthenticated.value;
+          final isLoggedIn = authSession.isAuthenticated;
           final isGoingToLogin = state.matchedLocation == '/login';
 
           if (!isLoggedIn && !isGoingToLogin) return '/login';
@@ -25,7 +25,7 @@ final GoRouter appRouter = GoRouter(
       GoRoute(
         path: '/login',
         builder: (context, state) =>
-            LoginScreen(onLoginSuccess: () => _isAuthenticated.value = true),
+            LoginScreen(onLoginSuccess: authSession.signIn),
       ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
