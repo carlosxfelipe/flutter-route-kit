@@ -3,7 +3,14 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.50.0-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.14.0-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 
-Flutter starter template with `go_router`, bottom navigation shell, reusable header, and system light/dark themes.
+Flutter starter template with `go_router`, bottom navigation shell, reusable Material 3 components, authentication flow, and system light/dark themes.
+
+## Features & Included Components
+
+- **Navigation:** `go_router` persistent bottom bar shell (`Home`, `Explore`, `Profile`).
+- **Auth Flow:** `LoginScreen` with form validation, `PopScope`, and toggleable session.
+- **Reusable Widgets:** `AppHeader`, `SearchHeader`, `AppButton`, `AppListCard`, and `AppBannerCard`.
+- **Demos & Theming:** Interactive component showcase in `Explore` and automatic system Light/Dark mode.
 
 ## Setup
 
@@ -15,10 +22,10 @@ flutter pub get
 
 ## Use `lib/` in Another Flutter Project
 
-Because `lib/` uses `go_router` (and relative imports so it works regardless of your package name), install `go_router` first in your target project (and `material_ui` if it is not already in `pubspec.yaml`):
+Because `lib/` uses `go_router` and `material_ui` (with relative imports so it works regardless of your package name), install them first in your target project:
 
 ```bash
-flutter pub add go_router
+flutter pub add go_router material_ui
 ```
 
 Then replace `lib/` using `degit`:
