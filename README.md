@@ -18,16 +18,16 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Running the App
 
+List available devices and IDs:
+
+```bash
+flutter devices
+```
+
 Run on Web (Chrome):
 
 ```bash
 flutter run -d chrome
-```
-
-Run on iOS (with an iOS device connected or Simulator running):
-
-```bash
-flutter run -d ios
 ```
 
 Launch the iOS Simulator first if none is running:
@@ -36,10 +36,22 @@ Launch the iOS Simulator first if none is running:
 flutter emulators --launch apple_ios_simulator
 ```
 
-Run on Android (with an Android device connected or emulator running):
+Run on iOS (matches an iPhone simulator or connected iPhone by name prefix):
 
 ```bash
-flutter run -d android
+flutter run -d iphone
+```
+
+Launch the Android emulator (`Medium_Phone`):
+
+```bash
+flutter emulators --launch Medium_Phone
+```
+
+Run on Android (or any specific device by ID from `flutter devices`):
+
+```bash
+flutter run -d <device-id>
 ```
 
 ## Formatting, Lint & Tests

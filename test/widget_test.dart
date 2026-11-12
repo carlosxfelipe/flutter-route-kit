@@ -61,4 +61,23 @@ void main() {
     await tester.tap(find.byIcon(Icons.settings_outlined));
     expect(tapped, isTrue);
   });
+
+  testWidgets('MyApp follows system brightness for light and dark themes', (
+    WidgetTester tester,
+  ) async {
+    tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+    addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    final darkContext = tester.element(find.byType(NavigationBar));
+    expect(Theme.of(darkContext).brightness, Brightness.dark);
+
+    tester.platformDispatcher.platformBrightnessTestValue = Brightness.light;
+    await tester.pumpAndSettle();
+
+    final lightContext = tester.element(find.byType(NavigationBar));
+    expect(Theme.of(lightContext).brightness, Brightness.light);
+  });
 }
