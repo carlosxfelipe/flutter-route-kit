@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import 'package:flutter_route_kit/screens/screens.dart';
+import '../screens/screens.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/home',

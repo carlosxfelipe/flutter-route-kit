@@ -1,20 +1,33 @@
 # flutter_route_kit
 
-A new Flutter project.
+[![Flutter](https://img.shields.io/badge/Flutter-3.50.0-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.14.0-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 
-## Getting Started
+Flutter starter template with `go_router`, bottom navigation shell, reusable header, and system light/dark themes.
 
-This project is a starting point for a Flutter application.
+## Setup
 
-A few resources to get you started if this is your first Flutter project:
+Install dependencies after cloning:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+flutter pub get
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Use `lib/` in Another Flutter Project
+
+Because `lib/` uses `go_router` (and relative imports so it works regardless of your package name), install `go_router` first in your target project (and `material_ui` if it is not already in `pubspec.yaml`):
+
+```bash
+flutter pub add go_router
+```
+
+Then replace `lib/` using `degit`:
+
+```bash
+rm -rf lib && npx --yes degit carlosxfelipe/flutter_route_kit/lib lib --force
+```
+
+> If you created the project with `flutter create`, update or remove the default counter test in `test/widget_test.dart`, since `MyHomePage` is replaced by this template.
 
 ## Running the App
 
@@ -72,16 +85,4 @@ Run tests:
 
 ```bash
 flutter test
-```
-
-Format shell scripts with `shfmt`:
-
-```bash
-find . -maxdepth 3 -name "*.sh" -not -path "*/.*" -not -path "./build/*" -exec shfmt -i 2 -w {} +
-```
-
-Or without a local `shfmt` installation (using `uvx`):
-
-```bash
-find . -maxdepth 3 -name "*.sh" -not -path "*/.*" -not -path "./build/*" -exec uvx --from shfmt-py shfmt -i 2 -w {} +
 ```

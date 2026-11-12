@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:flutter_route_kit/widgets/widgets.dart';
+import '../widgets/widgets.dart';
 
 class PlaceholderScreen extends StatelessWidget {
   const PlaceholderScreen({

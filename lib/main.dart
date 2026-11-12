@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:flutter_route_kit/router/app_router.dart';
+import 'router/app_router.dart';
 
 void main() {
   runApp(const MyApp());
