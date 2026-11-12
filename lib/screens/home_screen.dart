@@ -8,7 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     const shortcuts = [
@@ -42,51 +41,20 @@ class HomeScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Card(
-            color: colorScheme.primaryContainer,
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome to Flutter Route Kit',
-                    style: textTheme.titleLarge?.copyWith(
-                      color: colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Starter template configured with go_router and a persistent bottom navigation shell.',
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const AppBannerCard(
+            title: 'Welcome to Flutter Route Kit',
+            description: 'Starter template configured with go_router and a persistent bottom navigation shell.',
           ),
           const SizedBox(height: 20),
           Text('Quick Navigation', style: textTheme.titleMedium),
           const SizedBox(height: 8),
-          for (final item in shortcuts) ...[
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: colorScheme.outlineVariant),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: Icon(item.icon, color: colorScheme.primary),
-                title: Text(item.title),
-                subtitle: Text(item.subtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.go(item.route),
-              ),
+          for (final item in shortcuts)
+            AppListCard(
+              icon: item.icon,
+              title: item.title,
+              subtitle: item.subtitle,
+              onTap: () => context.go(item.route),
             ),
-            const SizedBox(height: 8),
-          ],
         ],
       ),
     );

@@ -1,4 +1,4 @@
-# flutter_route_kit
+# Flutter Route Kit
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.50.0-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.14.0-0175C2?logo=dart&logoColor=white)](https://dart.dev)
@@ -24,10 +24,18 @@ flutter pub add go_router
 Then replace `lib/` using `degit`:
 
 ```bash
-rm -rf lib && npx --yes degit carlosxfelipe/flutter_route_kit/lib lib --force
+rm -rf lib && npx --yes degit carlosxfelipe/flutter-route-kit/lib lib --force
 ```
 
 > If you created the project with `flutter create`, update or remove the default counter test in `test/widget_test.dart`, since `MyHomePage` is replaced by this template.
+
+## Authentication Toggle
+
+By default, the app starts on `/login` (`LoginScreen` accepts any non-empty email and password). To skip the login flow and start directly on `/home`, change `_requireAuth` in `lib/router/app_router.dart`:
+
+```dart
+const bool _requireAuth = false;
+```
 
 ## Running the App
 
