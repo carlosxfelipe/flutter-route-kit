@@ -2,6 +2,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.50.0-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.14.0-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Flutter starter template with `go_router`, bottom navigation shell, reusable Material 3 components, authentication flow, and system light/dark themes.
 
@@ -101,3 +102,7 @@ Run tests:
 ```bash
 flutter test
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) © 2026 Carlos Felipe Araujo.
