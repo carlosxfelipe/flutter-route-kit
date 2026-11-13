@@ -88,7 +88,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             onPressed: () {},
           ),
           const SizedBox(height: 24),
-          const _SectionTitle('SearchHeader'),
+          const _SectionTitle('AppSearchHeader'),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: DecoratedBox(
@@ -96,7 +96,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 border: Border.all(color: colorScheme.outlineVariant),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: SearchHeader(
+              child: AppSearchHeader(
                 hintText: 'Try searching...',
                 onChanged: (value) => setState(() => _searchQuery = value),
               ),
@@ -160,6 +160,83 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   );
               },
             ),
+          ),
+          const SizedBox(height: 24),
+          const _SectionTitle('AppEmptyState'),
+          AppEmptyState(
+            icon: Icons.inbox_outlined,
+            title: 'No items yet',
+            description: 'Use AppEmptyState for empty lists, search results, or offline views.',
+            actionLabel: 'Create item',
+            actionIcon: Icons.add,
+            onActionPressed: () {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('AppEmptyState action')),
+                );
+            },
+          ),
+          const SizedBox(height: 24),
+          const _SectionTitle('AppTextField'),
+          const AppTextField(
+            label: 'Username',
+            hintText: 'Enter your handle',
+            prefixIcon: Icons.alternate_email,
+          ),
+          const SizedBox(height: 12),
+          const AppTextField(
+            label: 'Password',
+            prefixIcon: Icons.lock_outline,
+            obscureText: true,
+            enableVisibilityToggle: true,
+          ),
+          const SizedBox(height: 24),
+          const _SectionTitle('AppBottomSheet'),
+          AppButton(
+            label: 'Open bottom sheet',
+            leftIcon: Icons.vertical_align_top_outlined,
+            variant: AppButtonVariant.outlined,
+            fullWidth: true,
+            onPressed: () {
+              showAppBottomSheet<void>(
+                context: context,
+                title: 'Quick Actions',
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppListCard(
+                      icon: Icons.share_outlined,
+                      title: 'Share link',
+                      subtitle: 'Copy route URL to clipboard',
+                      onTap: () => Navigator.of(context).pop(),
+                    ),
+                    const SizedBox(height: 10),
+                    AppListCard(
+                      icon: Icons.bookmark_border_outlined,
+                      title: 'Save preset',
+                      subtitle: 'Store current configuration',
+                      onTap: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 24),
+          const _SectionTitle('AppAvatar'),
+          const Row(
+            children: [
+              AppAvatar(
+                name: 'Carlos Araujo',
+                radius: 24,
+                showOnlineBadge: true,
+              ),
+              SizedBox(width: 12),
+              AppAvatar(name: 'Ada Lovelace', radius: 24),
+              SizedBox(width: 12),
+              AppAvatar(radius: 20, showOnlineBadge: true),
+            ],
           ),
         ],
       ),

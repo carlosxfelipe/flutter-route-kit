@@ -16,7 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
   bool _hasUnsavedInput = false;
 
   @override
@@ -98,17 +97,36 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const _LoginHeader(),
                       const SizedBox(height: 32),
-                      _EmailField(controller: _emailController),
-                      const SizedBox(height: 16),
-                      _PasswordField(
-                        controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        onToggleVisibility: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
+                      AppTextField(
+                        controller: _emailController,
+                        label: 'Email',
+                        prefixIcon: Icons.email_outlined,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const [AutofillHints.email],
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
                         },
-                        onSubmitted: _submit,
+                      ),
+                      const SizedBox(height: 16),
+                      AppTextField(
+                        controller: _passwordController,
+                        label: 'Password',
+                        prefixIcon: Icons.lock_outline,
+                        obscureText: true,
+                        enableVisibilityToggle: true,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: const [AutofillHints.password],
+                        onFieldSubmitted: (_) => _submit(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 24),
                       AppButton(
@@ -178,102 +196,4 @@ class _LoginHeader extends StatelessWidget {
       ],
     );
   }
-}
-
-class _EmailField extends StatelessWidget {
-  const _EmailField({required this.controller});
-
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      autofillHints: const [AutofillHints.email],
-      decoration: _inputDecoration(
-        context,
-        label: 'Email',
-        icon: Icons.email_outlined,
-      ),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Please enter your email';
-        }
-        return null;
-      },
-    );
-  }
-}
-
-class _PasswordField extends StatelessWidget {
-  const _PasswordField({
-    required this.controller,
-    required this.obscureText,
-    required this.onToggleVisibility,
-    required this.onSubmitted,
-  });
-
-  final TextEditingController controller;
-  final bool obscureText;
-  final VoidCallback onToggleVisibility;
-  final VoidCallback onSubmitted;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      textInputAction: TextInputAction.done,
-      autofillHints: const [AutofillHints.password],
-      onFieldSubmitted: (_) => onSubmitted(),
-      decoration: _inputDecoration(
-        context,
-        label: 'Password',
-        icon: Icons.lock_outline,
-        suffixIcon: IconButton(
-          onPressed: onToggleVisibility,
-          icon: Icon(
-            obscureText
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
-          ),
-        ),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your password';
-        }
-        return null;
-      },
-    );
-  }
-}
-
-InputDecoration _inputDecoration(
-  BuildContext context, {
-  required String label,
-  required IconData icon,
-  Widget? suffixIcon,
-}) {
-  final colorScheme = Theme.of(context).colorScheme;
-  final borderRadius = BorderRadius.circular(14);
-
-  return InputDecoration(
-    labelText: label,
-    prefixIcon: Icon(icon),
-    suffixIcon: suffixIcon,
-    filled: true,
-    fillColor: colorScheme.surfaceContainerLow,
-    border: OutlineInputBorder(borderRadius: borderRadius),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: borderRadius,
-      borderSide: BorderSide(color: colorScheme.outlineVariant),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: borderRadius,
-      borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
-    ),
-  );
 }

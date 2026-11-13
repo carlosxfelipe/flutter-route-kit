@@ -118,7 +118,7 @@ void main() {
     expect(Theme.of(lightContext).brightness, Brightness.light);
   });
 
-  testWidgets('SearchHeader emits changes and clears input', (
+  testWidgets('AppSearchHeader emits changes and clears input', (
     WidgetTester tester,
   ) async {
     String? latestQuery;
@@ -127,7 +127,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          appBar: SearchHeader(
+          appBar: AppSearchHeader(
             hintText: 'Search routes...',
             onChanged: (value) => latestQuery = value,
             onClear: () => cleared = true,
@@ -296,5 +296,99 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Discard credentials?'), findsOneWidget);
+  });
+
+  testWidgets('AppEmptyState renders content and triggers action callback', (
+    WidgetTester tester,
+  ) async {
+    var tapped = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: AppEmptyState(
+            icon: Icons.inbox_outlined,
+            title: 'Nothing here',
+            description: 'Add an item to get started.',
+            actionLabel: 'Add item',
+            onActionPressed: () => tapped = true,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Nothing here'), findsOneWidget);
+    expect(find.text('Add an item to get started.'), findsOneWidget);
+
+    await tester.tap(find.text('Add item'));
+    expect(tapped, isTrue);
+  });
+
+  testWidgets('AppTextField toggles password visibility', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: AppTextField(
+            label: 'Secret',
+            obscureText: true,
+            enableVisibilityToggle: true,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.visibility_outlined));
+    await tester.pump();
+    expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
+  });
+
+  testWidgets('showAppBottomSheet displays title and child', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => AppButton(
+              label: 'Open',
+              onPressed: () => showAppBottomSheet<void>(
+                context: context,
+                title: 'Options',
+                child: const Text('Sheet body'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Options'), findsOneWidget);
+    expect(find.text('Sheet body'), findsOneWidget);
+  });
+
+  testWidgets('AppAvatar extracts initials and shows fallback icon', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Row(
+            children: [
+              AppAvatar(name: 'Carlos Araujo'),
+              AppAvatar(),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('CA'), findsOneWidget);
+    expect(find.byIcon(Icons.person_outline), findsOneWidget);
   });
 }

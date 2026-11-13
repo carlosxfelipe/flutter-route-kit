@@ -2,8 +2,8 @@ import 'package:material_ui/material_ui.dart';
 
 import 'header_actions.dart';
 
-class SearchHeader extends StatefulWidget implements PreferredSizeWidget {
-  const SearchHeader({
+class AppSearchHeader extends StatefulWidget implements PreferredSizeWidget {
+  const AppSearchHeader({
     super.key,
     this.controller,
     this.hintText = 'Search...',
@@ -40,10 +40,10 @@ class SearchHeader extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 8);
 
   @override
-  State<SearchHeader> createState() => _SearchHeaderState();
+  State<AppSearchHeader> createState() => _AppSearchHeaderState();
 }
 
-class _SearchHeaderState extends State<SearchHeader> {
+class _AppSearchHeaderState extends State<AppSearchHeader> {
   late TextEditingController _controller;
   late bool _ownsController;
 
@@ -56,7 +56,7 @@ class _SearchHeaderState extends State<SearchHeader> {
   }
 
   @override
-  void didUpdateWidget(covariant SearchHeader oldWidget) {
+  void didUpdateWidget(covariant AppSearchHeader oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _controller.removeListener(_onTextChanged);
