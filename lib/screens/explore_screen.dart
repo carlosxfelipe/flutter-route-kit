@@ -14,6 +14,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   bool _notificationsEnabled = true;
   String _searchQuery = '';
   String _selectedView = 'Day';
+  String _selectedLayout = 'List';
 
   Future<void> _simulateLoading() async {
     setState(() => _isLoading = true);
@@ -265,6 +266,30 @@ class _ExploreScreenState extends State<ExploreScreen> {
           const SizedBox(height: 8),
           Text(
             'Selected view: $_selectedView',
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 16),
+          AppSegmentedSwitcher<String>(
+            options: const [
+              SegmentedSwitcherOption(
+                value: 'List',
+                label: 'List',
+                icon: Icons.view_list_outlined,
+              ),
+              SegmentedSwitcherOption(
+                value: 'Grid',
+                label: 'Grid',
+                icon: Icons.grid_view_outlined,
+              ),
+            ],
+            selected: _selectedLayout,
+            onChanged: (value) => setState(() => _selectedLayout = value),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Selected layout: $_selectedLayout',
             style: textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

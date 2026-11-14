@@ -10,7 +10,7 @@ Flutter starter template with `go_router`, bottom navigation shell, reusable Mat
 
 - **Navigation:** `go_router` persistent bottom bar shell (`Home`, `Explore`, `Profile`).
 - **Auth Flow:** `LoginScreen` with form validation, `PopScope`, and toggleable session.
-- **Reusable Widgets:** `AppHeader`, `AppSearchHeader`, `AppButton`, `AppListCard`, `AppBannerCard`, `AppEmptyState`, `AppTextField`, `showAppBottomSheet`, and `AppAvatar`.
+- **Reusable Widgets:** `AppHeader`, `AppSearchHeader`, `AppButton`, `AppListCard`, `AppBannerCard`, `AppEmptyState`, `AppTextField`, `showAppBottomSheet`, `AppAvatar`, `AppSegmentedSwitcher`, and `ThemeSwitcher`.
 - **Demos & Theming:** Interactive component showcase in `Explore` and automatic system Light/Dark mode.
 
 ## Setup
