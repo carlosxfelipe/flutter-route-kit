@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../router/app_router.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
@@ -57,6 +58,13 @@ class HomeScreen extends StatelessWidget {
               subtitle: item.subtitle,
               onTap: () => context.go(item.route),
             ),
+          AppListCard(
+            icon: Icons.logout,
+            title: 'Logout',
+            subtitle: 'Sign out of your account',
+            showChevron: false,
+            onTap: () => _confirmLogout(context),
+          ),
           const SizedBox(height: 20),
           Text('Preferences', style: textTheme.titleMedium),
           const SizedBox(height: 8),
@@ -87,6 +95,50 @@ class HomeScreen extends StatelessWidget {
                 },
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmLogout(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return showAppBottomSheet<void>(
+      context: context,
+      title: 'Logout',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Are you sure you want to sign out of your account?',
+            style: textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: 'Cancel',
+                  variant: AppButtonVariant.outlined,
+                  fullWidth: true,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AppButton(
+                  label: 'Logout',
+                  leftIcon: Icons.logout,
+                  fullWidth: true,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    authSession.signOut();
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),

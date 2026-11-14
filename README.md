@@ -50,15 +50,17 @@ const bool _requireAuth = false;
 Theme configuration lives in `lib/theme/` and is exposed through the `lib/theme/theme.dart` barrel file:
 
 - `lib/theme/theme_mode.dart`: manages `ThemeMode` (`light`, `dark`, `system`) via `themeModeNotifier` and `ThemeModeLabel`.
-- `lib/theme/deep_purple_theme.dart`: default Material 3 `AppTheme` using `Colors.deepPurple` as the seed color.
+- `lib/theme/custom_blue_theme.dart` **(default)**: customized Material 3 `AppTheme` using `Colors.blue` as the seed color with neutral light/dark surface overrides.
+- `lib/theme/deep_purple_theme.dart`: standard Material 3 `AppTheme` using `Colors.deepPurple` as the seed color.
 
-To switch to a different theme, create a new file defining `AppTheme` (with `light()` and `dark()`) and update the export in `lib/theme/theme.dart`:
+To switch themes (or add a new file defining `AppTheme` with `light()` and `dark()`), update the export in `lib/theme/theme.dart`:
 
 ```dart
 export 'theme_mode.dart';
 
 // Swap the active AppTheme implementation by changing the export below.
-export 'deep_purple_theme.dart';
+export 'custom_blue_theme.dart';
+// export 'deep_purple_theme.dart';
 ```
 
 ## Running the App
