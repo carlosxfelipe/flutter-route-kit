@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../theme/app_theme.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -56,6 +57,37 @@ class HomeScreen extends StatelessWidget {
               subtitle: item.subtitle,
               onTap: () => context.go(item.route),
             ),
+          const SizedBox(height: 20),
+          Text('Preferences', style: textTheme.titleMedium),
+          const SizedBox(height: 8),
+          ValueListenableBuilder<ThemeMode>(
+            valueListenable: themeModeNotifier,
+            builder: (context, mode, _) {
+              return AppListCard(
+                icon: Icons.settings_outlined,
+                title: 'Appearance',
+                subtitle: 'Theme: ${mode.label}',
+                onTap: () {
+                  showAppBottomSheet<void>(
+                    context: context,
+                    title: 'Appearance',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'App theme',
+                          style: textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 12),
+                        const ThemeSwitcher(),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );

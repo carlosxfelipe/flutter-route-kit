@@ -13,6 +13,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   bool _isLoading = false;
   bool _notificationsEnabled = true;
   String _searchQuery = '';
+  String _selectedView = 'Day';
 
   Future<void> _simulateLoading() async {
     setState(() => _isLoading = true);
@@ -237,6 +238,36 @@ class _ExploreScreenState extends State<ExploreScreen> {
               SizedBox(width: 12),
               AppAvatar(radius: 20, showOnlineBadge: true),
             ],
+          ),
+          const SizedBox(height: 24),
+          const _SectionTitle('AppSegmentedSwitcher'),
+          AppSegmentedSwitcher<String>(
+            options: const [
+              SegmentedSwitcherOption(
+                value: 'Day',
+                label: 'Day',
+                icon: Icons.today_outlined,
+              ),
+              SegmentedSwitcherOption(
+                value: 'Week',
+                label: 'Week',
+                icon: Icons.view_week_outlined,
+              ),
+              SegmentedSwitcherOption(
+                value: 'Month',
+                label: 'Month',
+                icon: Icons.calendar_month_outlined,
+              ),
+            ],
+            selected: _selectedView,
+            onChanged: (value) => setState(() => _selectedView = value),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Selected view: $_selectedView',
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),

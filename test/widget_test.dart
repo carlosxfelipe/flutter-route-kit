@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_route_kit/main.dart';
 import 'package:flutter_route_kit/router/auth_session.dart';
 import 'package:flutter_route_kit/screens/screens.dart';
+import 'package:flutter_route_kit/theme/app_theme.dart';
 import 'package:flutter_route_kit/widgets/widgets.dart';
 
 void main() {
@@ -390,5 +391,34 @@ void main() {
 
     expect(find.text('CA'), findsOneWidget);
     expect(find.byIcon(Icons.person_outline), findsOneWidget);
+  });
+
+  testWidgets('ThemeSwitcher updates themeModeNotifier with English options', (
+    WidgetTester tester,
+  ) async {
+    themeModeNotifier.value = ThemeMode.system;
+
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: ThemeSwitcher())),
+    );
+
+    expect(find.text('Light'), findsOneWidget);
+    expect(find.text('Dark'), findsOneWidget);
+    expect(find.text('System'), findsOneWidget);
+
+    await tester.tap(find.text('Dark'));
+    await tester.pump();
+    expect(themeModeNotifier.value, ThemeMode.dark);
+    expect(themeModeNotifier.value.label, 'Dark');
+
+    await tester.tap(find.text('Light'));
+    await tester.pump();
+    expect(themeModeNotifier.value, ThemeMode.light);
+    expect(themeModeNotifier.value.label, 'Light');
+
+    await tester.tap(find.text('System'));
+    await tester.pump();
+    expect(themeModeNotifier.value, ThemeMode.system);
+    expect(themeModeNotifier.value.label, 'System');
   });
 }
