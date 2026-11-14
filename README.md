@@ -45,6 +45,22 @@ By default, the app starts on `/login` (`LoginScreen` accepts any non-empty emai
 const bool _requireAuth = false;
 ```
 
+## Theming
+
+Theme configuration lives in `lib/theme/` and is exposed through the `lib/theme/theme.dart` barrel file:
+
+- `lib/theme/theme_mode.dart`: manages `ThemeMode` (`light`, `dark`, `system`) via `themeModeNotifier` and `ThemeModeLabel`.
+- `lib/theme/deep_purple_theme.dart`: default Material 3 `AppTheme` using `Colors.deepPurple` as the seed color.
+
+To switch to a different theme, create a new file defining `AppTheme` (with `light()` and `dark()`) and update the export in `lib/theme/theme.dart`:
+
+```dart
+export 'theme_mode.dart';
+
+// Swap the active AppTheme implementation by changing the export below.
+export 'deep_purple_theme.dart';
+```
+
 ## Running the App
 
 List available devices and IDs:

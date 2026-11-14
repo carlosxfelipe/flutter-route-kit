@@ -4,7 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_route_kit/main.dart';
 import 'package:flutter_route_kit/router/auth_session.dart';
 import 'package:flutter_route_kit/screens/screens.dart';
-import 'package:flutter_route_kit/theme/app_theme.dart';
+import 'package:flutter_route_kit/theme/theme.dart';
 import 'package:flutter_route_kit/widgets/widgets.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../theme/app_theme.dart';
+import '../theme/theme.dart';
 import 'app_segmented_switcher.dart';
 
 class ThemeSwitcher extends StatelessWidget {

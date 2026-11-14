@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'router/app_router.dart';
-import 'theme/app_theme.dart';
+import 'theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
