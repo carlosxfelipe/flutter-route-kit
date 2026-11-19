@@ -9,9 +9,10 @@ Flutter starter template with `go_router`, bottom navigation shell, reusable Mat
 ## Features & Included Components
 
 - **Navigation:** `go_router` persistent bottom bar shell (`Home`, `Explore`, `Profile`).
-- **Auth Flow:** `LoginScreen` with form validation, `PopScope`, and toggleable session.
+- **Screens:** `LoginScreen`, `HomeScreen`, `ExploreScreen`, `ProfileScreen`, and reusable `PlaceholderScreen`.
+- **Auth Flow:** `LoginScreen` with form validation, `PopScope`, and toggleable session (with sign-out confirmation in `Profile`).
 - **Reusable Widgets:** `AppHeader`, `AppSearchHeader`, `AppButton`, `AppListCard`, `AppBannerCard`, `AppEmptyState`, `AppTextField`, `showAppBottomSheet`, `AppAvatar`, `AppSegmentedSwitcher`, and `ThemeSwitcher`.
-- **Demos & Theming:** Interactive component showcase in `Explore` and automatic system Light/Dark mode.
+- **Demos & Theming:** Interactive component showcase in `Explore` and `Light` / `Dark` / `System` theme switching in `Profile` -> **Appearance**.
 
 ## Setup
 
@@ -103,10 +104,10 @@ flutter run -d <device-id>
 
 ## Formatting, Lint & Tests
 
-Format Dart code:
+Format Dart, Markdown, and shell scripts (pass `--all` for the entire repository):
 
 ```bash
-dart format .
+./fmt.sh
 ```
 
 Run static analysis / lint:
