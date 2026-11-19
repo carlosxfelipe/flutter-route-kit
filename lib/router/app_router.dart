@@ -52,11 +52,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/profile',
-              builder: (context, state) => const PlaceholderScreen(
-                title: 'Profile',
-                description:
-                    'Account screen. Manage user details and preferences here.',
-              ),
+              builder: (context, state) => const ProfileScreen(),
             ),
           ],
         ),

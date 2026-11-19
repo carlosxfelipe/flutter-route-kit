@@ -1,12 +1,31 @@
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../router/app_router.dart';
-import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  static const _githubRepoUrl =
+      'https://github.com/carlosxfelipe/flutter-route-kit';
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _copyRepositoryUrl(BuildContext context) async {
+    try {
+      await Clipboard.setData(const ClipboardData(text: _githubRepoUrl));
+      if (!context.mounted) return;
+      _showSnackBar(context, 'GitHub repository URL copied to clipboard');
+    } catch (_) {
+      if (!context.mounted) return;
+      _showSnackBar(context, 'Could not copy GitHub repository URL');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +52,10 @@ class HomeScreen extends StatelessWidget {
         rightIcon: Icons.notifications_none,
         rightIconTooltip: 'Notifications',
         rightIconBadgeCount: 3,
-        onRightIconPressed: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('3 new notifications')),
-            );
-        },
+        onRightIconPressed: () => _showSnackBar(context, '3 new notifications'),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
           const AppBannerCard(
             title: 'Welcome to Flutter Route Kit',
@@ -58,87 +71,14 @@ class HomeScreen extends StatelessWidget {
               subtitle: item.subtitle,
               onTap: () => context.go(item.route),
             ),
-          AppListCard(
-            icon: Icons.logout,
-            title: 'Logout',
-            subtitle: 'Sign out of your account',
-            showChevron: false,
-            onTap: () => _confirmLogout(context),
-          ),
-          const SizedBox(height: 20),
-          Text('Preferences', style: textTheme.titleMedium),
+          const SizedBox(height: 12),
+          Text('Resources', style: textTheme.titleMedium),
           const SizedBox(height: 8),
-          ValueListenableBuilder<ThemeMode>(
-            valueListenable: themeModeNotifier,
-            builder: (context, mode, _) {
-              return AppListCard(
-                icon: Icons.settings_outlined,
-                title: 'Appearance',
-                subtitle: 'Theme: ${mode.label}',
-                onTap: () {
-                  showAppBottomSheet<void>(
-                    context: context,
-                    title: 'Appearance',
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'App theme',
-                          style: textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 12),
-                        const ThemeSwitcher(),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _confirmLogout(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return showAppBottomSheet<void>(
-      context: context,
-      title: 'Logout',
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Are you sure you want to sign out of your account?',
-            style: textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: 'Cancel',
-                  variant: AppButtonVariant.outlined,
-                  fullWidth: true,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: AppButton(
-                  label: 'Logout',
-                  leftIcon: Icons.logout,
-                  fullWidth: true,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    authSession.signOut();
-                  },
-                ),
-              ),
-            ],
+          AppListCard(
+            icon: Icons.code,
+            title: 'GitHub Repository',
+            subtitle: 'carlosxfelipe/flutter-route-kit',
+            onTap: () => _copyRepositoryUrl(context),
           ),
         ],
       ),

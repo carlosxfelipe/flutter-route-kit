@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -40,10 +41,8 @@ void main() {
       await tester.tap(find.byIcon(Icons.person_outline).last);
       await tester.pumpAndSettle();
 
-      expect(
-        find.text('Account screen. Manage user details and preferences here.'),
-        findsOneWidget,
-      );
+      expect(find.text('User Profile'), findsOneWidget);
+      expect(find.text('user@example.com'), findsOneWidget);
     },
   );
 
@@ -421,4 +420,127 @@ void main() {
     expect(themeModeNotifier.value, ThemeMode.system);
     expect(themeModeNotifier.value.label, 'System');
   });
+
+  testWidgets('PlaceholderScreen renders title and description', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: PlaceholderScreen(
+          title: 'Settings',
+          description: 'Manage app settings here.',
+        ),
+      ),
+    );
+
+    expect(find.text('Settings'), findsNWidgets(2));
+    expect(find.text('Manage app settings here.'), findsOneWidget);
+  });
+
+  testWidgets(
+    'ProfileScreen renders profile info, toggles notifications, opens sheets, and signs out',
+    (WidgetTester tester) async {
+      themeModeNotifier.value = ThemeMode.system;
+      var signedOut = false;
+
+      await tester.pumpWidget(
+        MaterialApp(home: ProfileScreen(onSignOut: () => signedOut = true)),
+      );
+
+      expect(find.text('User Profile'), findsOneWidget);
+      expect(find.text('user@example.com'), findsOneWidget);
+      expect(find.text('UP'), findsOneWidget);
+      expect(find.text('Enabled'), findsOneWidget);
+      expect(find.text('Theme: System'), findsOneWidget);
+
+      await tester.tap(find.text('Edit Profile'));
+      await tester.pump();
+      expect(find.text('Edit profile coming soon'), findsOneWidget);
+
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      expect(find.text('Disabled'), findsOneWidget);
+
+      await tester.tap(find.text('Privacy & Security'));
+      await tester.pump();
+      expect(find.text('Privacy & Security coming soon'), findsOneWidget);
+
+      await tester.tap(find.text('Appearance'));
+      await tester.pumpAndSettle();
+      expect(find.text('App theme'), findsOneWidget);
+
+      await tester.tap(find.text('Dark'));
+      await tester.pumpAndSettle();
+      expect(themeModeNotifier.value, ThemeMode.dark);
+
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(find.text('Theme: Dark'), findsOneWidget);
+
+      await tester.scrollUntilVisible(
+        find.widgetWithText(OutlinedButton, 'Sign out'),
+        200,
+      );
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Sign out'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Are you sure you want to sign out of your account?'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Sign out'));
+      await tester.pumpAndSettle();
+      expect(signedOut, isTrue);
+
+      themeModeNotifier.value = ThemeMode.system;
+    },
+  );
+
+  testWidgets(
+    'HomeScreen renders quick navigation, resources, and handles actions',
+    (WidgetTester tester) async {
+      String? copiedText;
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'Clipboard.setData') {
+            copiedText =
+                (call.arguments as Map<Object?, Object?>)['text'] as String?;
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+
+      await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+
+      expect(find.text('Welcome to Flutter Route Kit'), findsOneWidget);
+      expect(find.text('Quick Navigation'), findsOneWidget);
+      expect(find.text('Explore'), findsOneWidget);
+      expect(find.text('Profile'), findsOneWidget);
+      expect(find.text('Resources'), findsOneWidget);
+      expect(find.text('GitHub Repository'), findsOneWidget);
+      expect(find.text('carlosxfelipe/flutter-route-kit'), findsOneWidget);
+      expect(find.text('Logout'), findsNothing);
+      expect(find.text('Appearance'), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.pump();
+      expect(find.text('3 new notifications'), findsOneWidget);
+
+      await tester.tap(find.text('GitHub Repository'));
+      await tester.pumpAndSettle();
+      expect(copiedText, 'https://github.com/carlosxfelipe/flutter-route-kit');
+      expect(
+        find.text('GitHub repository URL copied to clipboard'),
+        findsOneWidget,
+      );
+    },
+  );
 }
