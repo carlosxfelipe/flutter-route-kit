@@ -51,42 +51,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return showAppBottomSheet<void>(
       context: context,
       title: 'Sign out',
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Are you sure you want to sign out of your account?',
-            style: textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+      child: Builder(
+        builder: (sheetContext) => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Are you sure you want to sign out of your account?',
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: 'Cancel',
-                  variant: AppButtonVariant.outlined,
-                  fullWidth: true,
-                  onPressed: () => Navigator.of(context).pop(),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    label: 'Cancel',
+                    variant: AppButtonVariant.outlined,
+                    fullWidth: true,
+                    onPressed: () => Navigator.of(sheetContext).pop(),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: AppButton(
-                  label: 'Sign out',
-                  leftIcon: Icons.logout,
-                  fullWidth: true,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    (widget.onSignOut ?? authSession.signOut)();
-                  },
+                const SizedBox(width: 12),
+                Expanded(
+                  child: AppButton(
+                    label: 'Sign out',
+                    leftIcon: Icons.logout,
+                    fullWidth: true,
+                    onPressed: () {
+                      Navigator.of(sheetContext).pop();
+                      (widget.onSignOut ?? authSession.signOut)();
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

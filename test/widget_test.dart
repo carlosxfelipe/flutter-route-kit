@@ -372,6 +372,58 @@ void main() {
     expect(find.text('Sheet body'), findsOneWidget);
   });
 
+  testWidgets(
+    'showAppBottomSheet renders above NavigationBar on root navigator',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Navigator(
+              onGenerateRoute: (_) => MaterialPageRoute<void>(
+                builder: (context) => Center(
+                  child: AppButton(
+                    label: 'Open sheet',
+                    onPressed: () => showAppBottomSheet<void>(
+                      context: context,
+                      title: 'Overlay sheet',
+                      child: Builder(
+                        builder: (sheetContext) => AppButton(
+                          label: 'Dismiss',
+                          onPressed: () => Navigator.of(sheetContext).pop(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            bottomNavigationBar: NavigationBar(
+              destinations: const [
+                NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+                NavigationDestination(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open sheet'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Overlay sheet'), findsOneWidget);
+      final navBarRect = tester.getRect(find.byType(NavigationBar));
+      final sheetRect = tester.getRect(find.byType(BottomSheet));
+      expect(sheetRect.bottom, greaterThan(navBarRect.top));
+
+      await tester.tap(find.text('Dismiss'));
+      await tester.pumpAndSettle();
+      expect(find.text('Overlay sheet'), findsNothing);
+    },
+  );
+
   testWidgets('AppAvatar extracts initials and shows fallback icon', (
     WidgetTester tester,
   ) async {

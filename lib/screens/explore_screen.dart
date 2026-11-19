@@ -204,23 +204,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
               showAppBottomSheet<void>(
                 context: context,
                 title: 'Quick Actions',
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppListCard(
-                      icon: Icons.share_outlined,
-                      title: 'Share link',
-                      subtitle: 'Copy route URL to clipboard',
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                    const SizedBox(height: 10),
-                    AppListCard(
-                      icon: Icons.bookmark_border_outlined,
-                      title: 'Save preset',
-                      subtitle: 'Store current configuration',
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                  ],
+                child: Builder(
+                  builder: (sheetContext) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppListCard(
+                        icon: Icons.share_outlined,
+                        title: 'Share link',
+                        subtitle: 'Copy route URL to clipboard',
+                        onTap: () => Navigator.of(sheetContext).pop(),
+                      ),
+                      const SizedBox(height: 10),
+                      AppListCard(
+                        icon: Icons.bookmark_border_outlined,
+                        title: 'Save preset',
+                        subtitle: 'Store current configuration',
+                        onTap: () => Navigator.of(sheetContext).pop(),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

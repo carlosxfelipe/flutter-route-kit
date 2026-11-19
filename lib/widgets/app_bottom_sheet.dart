@@ -6,12 +6,14 @@ Future<T?> showAppBottomSheet<T>({
   String? title,
   bool isScrollControlled = true,
   bool showDragHandle = true,
+  bool useRootNavigator = true,
   EdgeInsetsGeometry padding = const EdgeInsets.fromLTRB(20, 4, 20, 24),
 }) {
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: isScrollControlled,
     useSafeArea: true,
+    useRootNavigator: useRootNavigator,
     showDragHandle: showDragHandle,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
