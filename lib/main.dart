@@ -54,22 +54,8 @@ class _MyAppState extends State<MyApp> {
           darkTheme: AppTheme.dark(),
           routerConfig: appRouter,
           builder: (context, child) {
-            final theme = Theme.of(context);
-            final iconBrightness = theme.brightness == Brightness.dark
-                ? Brightness.light
-                : Brightness.dark;
-
             return AnnotatedRegion<SystemUiOverlayStyle>(
-              value: SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness: iconBrightness,
-                statusBarBrightness: theme.brightness,
-                systemNavigationBarColor:
-                    theme.navigationBarTheme.backgroundColor ??
-                    theme.colorScheme.surfaceContainer,
-                systemNavigationBarIconBrightness: iconBrightness,
-                systemNavigationBarDividerColor: Colors.transparent,
-              ),
+              value: systemOverlayStyleFor(Theme.of(context)),
               child: child ?? const SizedBox.shrink(),
             );
           },
