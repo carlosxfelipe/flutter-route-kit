@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'router/app_router.dart';
@@ -52,6 +53,24 @@ class _MyAppState extends State<MyApp> {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           routerConfig: appRouter,
+          builder: (context, child) {
+            final theme = Theme.of(context);
+            final iconBrightness = theme.brightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark;
+
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: iconBrightness,
+                statusBarBrightness: theme.brightness,
+                systemNavigationBarColor: theme.colorScheme.surface,
+                systemNavigationBarIconBrightness: iconBrightness,
+                systemNavigationBarDividerColor: Colors.transparent,
+              ),
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
         );
       },
     );
