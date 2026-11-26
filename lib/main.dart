@@ -64,7 +64,9 @@ class _MyAppState extends State<MyApp> {
                 statusBarColor: Colors.transparent,
                 statusBarIconBrightness: iconBrightness,
                 statusBarBrightness: theme.brightness,
-                systemNavigationBarColor: theme.colorScheme.surface,
+                systemNavigationBarColor:
+                    theme.navigationBarTheme.backgroundColor ??
+                    theme.colorScheme.surfaceContainer,
                 systemNavigationBarIconBrightness: iconBrightness,
                 systemNavigationBarDividerColor: Colors.transparent,
               ),
